@@ -24,8 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
         MainViewModel mainViewModel = ViewModelProviders.of(this)
                 .get(MainViewModel.class);
-        UserList mContacts = mainViewModel.getContacts();
-        if(mContacts!=null){
+        UserList userList = mainViewModel.getContacts();
+        if(userList!=null){
+            List<contacts> mContacts = userList.getContacts();
             MainAdapter adapter = new MainAdapter(mContacts,this);
             recyclerView.setAdapter(adapter);
         }
@@ -33,3 +34,31 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
+
+//    JSONObject jsonObject = new JSONObject(readTwitterFeed);
+//
+//contacts = jsonObject.getJSONArray("contacts");
+//
+//public void onResponse(JSONObject response) {
+//
+//        try {
+//
+//        JSONArray JsonRes = response.getJSONArray("contacts");
+//
+//        for(int i =0; i <JsonRes.length(); i++){
+//
+//        JSONObject objectoContact = JsonRes.getJSONObject(i);
+//
+//        String name = objectoContact.getString("name");
+//
+//        String presentValStr = mTextView.getText().toString();
+//
+//        presentValStr += "\n" + name;
+//
+//        mTextView.setText(presentValStr);
+//
+//        Toast.makeText(MainActivity.this, "nombres: "+name, Toast.LENGTH_SHORT).show();
+//
+//
+//
+//        }

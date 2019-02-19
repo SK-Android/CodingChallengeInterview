@@ -9,6 +9,8 @@ import com.androidapp.mcs.codingchallengeinterview.model.UserList;
 import com.androidapp.mcs.codingchallengeinterview.model.contacts;
 import com.androidapp.mcs.codingchallengeinterview.service.ApiInterface;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +24,7 @@ import static android.content.ContentValues.TAG;
 public class MainViewModel extends AndroidViewModel {
 
     private UserList contact;
-    ArrayList<contacts> userList;
+
 
     public MainViewModel(@NonNull Application application) {
         super(application);

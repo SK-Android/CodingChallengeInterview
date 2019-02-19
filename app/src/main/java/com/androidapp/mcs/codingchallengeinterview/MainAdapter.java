@@ -15,10 +15,10 @@ import java.util.List;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
-    private UserList contactList;
+    private List<contacts> contactList;
     private Context context;
 
-    MainAdapter(UserList contactList, Context context) {
+    MainAdapter(List<contacts> contactList, Context context) {
         this.contactList = contactList;
         this.context = context;
     }
@@ -35,7 +35,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
 
-        contacts mContact = contactList.getContacts().get(i);
+        contacts mContact = contactList.get(i);
         viewHolder.name.setText(mContact.getName());
         viewHolder.email.setText(mContact.getEmail());
         viewHolder.address.setText(mContact.getAddress());
@@ -47,7 +47,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return contactList.getContacts().size();
+        return contactList.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
