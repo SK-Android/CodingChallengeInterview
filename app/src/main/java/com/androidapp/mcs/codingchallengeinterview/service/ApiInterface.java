@@ -22,5 +22,5 @@ public interface ApiInterface {
             .build();
 
     @GET("contacts/")
-    Call<JSONObject> getContact();
+    Call<UserList> getContact();
 }

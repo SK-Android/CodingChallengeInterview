@@ -1,56 +1,70 @@
 package com.androidapp.mcs.codingchallengeinterview;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.util.Log;
+import android.widget.TextView;
 
 import com.androidapp.mcs.codingchallengeinterview.model.UserList;
-import com.androidapp.mcs.codingchallengeinterview.model.contacts;
-import com.androidapp.mcs.codingchallengeinterview.viewmodel.MainViewModel;
+import com.androidapp.mcs.codingchallengeinterview.service.ApiInterface;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
-import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
 
+    String responseString = "";
+    TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+         textView = findViewById(R.id.textView);
+        getData();
+    }
 
-//        RecyclerView recyclerView = findViewById(R.id.main_rv);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+    private void getData() {
+        ApiInterface apiInterface = ApiInterface.retrofit.create(ApiInterface.class);
+        Call<UserList> call = apiInterface.getContact();
+        call.enqueue(new Callback<UserList>() {
+            @Override
+            public void onResponse(Call<UserList> call, Response<UserList> response) {
+                if (response.isSuccessful()) {
 
-        ListView listView = findViewById(R.id.main_list);
+                    int size = response.body().getContacts().size();
 
-        MainViewModel mainViewModel = ViewModelProviders.of(this)
-                .get(MainViewModel.class);
+                    for (int i = 0; i < size; i++) {
+                        String name = response.body().getContacts().get(i).getName();
+                        String email = response.body().getContacts().get(i).getEmail();
+                        String home = response.body().getContacts().get(i).getPhone().getHome();
+                        String mobile = response.body().getContacts().get(i).getPhone().getMobile();
 
-        ArrayList<HashMap<String, String>> contactsList = mainViewModel.getContactList();
+                        responseString += "Name: " + name + "\n\n";
+                        responseString += "Email: " + email + "\n\n";
+                        responseString += "Home: " + home + "\n\n";
+                        responseString += "Mobile: " + mobile + "\n\n\n\n";
 
-        /**
-         * Updating parsed JSON data into ListView
-         * */
-        ListAdapter adapter = new SimpleAdapter(
-                MainActivity.this, contactsList,
-                R.layout.main_list_item, new String[] { "name", "email","address","gender","home",
-                "mobile","office" }, new int[] { R.id.name,
-                R.id.email,R.id.address,R.id.gender,R.id.home, R.id.mobile ,R.id.office});
-
-       listView.setAdapter(adapter);
+                        textView.setText(responseString);
+                    }
+                }
+            }
 
 
-//        if(contactsList!=null){
-//            MainAdapter adapter = new MainAdapter(contactsList,this);
-//            recyclerView.setAdapter(adapter);
-//        }
+            @Override
+            public void onFailure(Call<UserList> call, Throwable t) {
 
+                Log.i(TAG, "onFailure: MainViewModel ");
+            }
+        });
 
     }
 }
