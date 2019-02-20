@@ -3,6 +3,8 @@ package com.androidapp.mcs.codingchallengeinterview.service;
 import com.androidapp.mcs.codingchallengeinterview.model.UserList;
 import com.androidapp.mcs.codingchallengeinterview.model.contacts;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -20,5 +22,5 @@ public interface ApiInterface {
             .build();
 
     @GET("contacts/")
-    Call<UserList> getContacts();
+    Call<JSONObject> getContact();
 }

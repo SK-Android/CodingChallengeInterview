@@ -5,11 +5,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import com.androidapp.mcs.codingchallengeinterview.model.UserList;
 import com.androidapp.mcs.codingchallengeinterview.model.contacts;
 import com.androidapp.mcs.codingchallengeinterview.viewmodel.MainViewModel;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,46 +24,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = findViewById(R.id.main_rv);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+//        RecyclerView recyclerView = findViewById(R.id.main_rv);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+
+        ListView listView = findViewById(R.id.main_list);
 
         MainViewModel mainViewModel = ViewModelProviders.of(this)
                 .get(MainViewModel.class);
-        UserList userList = mainViewModel.getContacts();
-        if(userList!=null){
-            List<contacts> mContacts = userList.getContacts();
-            MainAdapter adapter = new MainAdapter(mContacts,this);
-            recyclerView.setAdapter(adapter);
-        }
+
+        ArrayList<HashMap<String, String>> contactsList = mainViewModel.getContactList();
+
+        /**
+         * Updating parsed JSON data into ListView
+         * */
+        ListAdapter adapter = new SimpleAdapter(
+                MainActivity.this, contactsList,
+                R.layout.main_list_item, new String[] { "name", "email","address","gender","home",
+                "mobile","office" }, new int[] { R.id.name,
+                R.id.email,R.id.address,R.id.gender,R.id.home, R.id.mobile ,R.id.office});
+
+       listView.setAdapter(adapter);
+
+
+//        if(contactsList!=null){
+//            MainAdapter adapter = new MainAdapter(contactsList,this);
+//            recyclerView.setAdapter(adapter);
+//        }
 
 
     }
 }
-
-//    JSONObject jsonObject = new JSONObject(readTwitterFeed);
-//
-//contacts = jsonObject.getJSONArray("contacts");
-//
-//public void onResponse(JSONObject response) {
-//
-//        try {
-//
-//        JSONArray JsonRes = response.getJSONArray("contacts");
-//
-//        for(int i =0; i <JsonRes.length(); i++){
-//
-//        JSONObject objectoContact = JsonRes.getJSONObject(i);
-//
-//        String name = objectoContact.getString("name");
-//
-//        String presentValStr = mTextView.getText().toString();
-//
-//        presentValStr += "\n" + name;
-//
-//        mTextView.setText(presentValStr);
-//
-//        Toast.makeText(MainActivity.this, "nombres: "+name, Toast.LENGTH_SHORT).show();
-//
-//
-//
-//        }
